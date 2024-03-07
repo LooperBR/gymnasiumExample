@@ -55,8 +55,6 @@ class BlackjackAgent:
         self.epsilon_decay = epsilon_decay
         self.final_epsilon = final_epsilon
 
-        self.training_error = []
-
     def get_action(self, obs: tuple[int, int, bool]) -> int:
         """
         Returns the best action with probability (1 - epsilon)
@@ -87,7 +85,6 @@ class BlackjackAgent:
         self.q_values[obs][action] = (
             self.q_values[obs][action] + self.lr * temporal_difference
         )
-        self.training_error.append(temporal_difference)
 
     def decay_epsilon(self):
         self.epsilon = max(self.final_epsilon, self.epsilon - epsilon_decay)
@@ -220,19 +217,27 @@ done = False
 for episode in range(1000):
     obs, info = env2.reset()
     done = False
-
+    print("reset")
+    print(obs)
     # play one episode
     while not done:
+        time.sleep(4)
         action = agent.get_action(obs)
         if action == 0:
             print("stand")
         else:
             print("hit")
-        time.sleep(2)
         next_obs, reward, terminated, truncated, info = env2.step(action)
+        print(next_obs)
         print(reward)
+        
+        
+        
 
         # update if the environment is done and the current obs
         done = terminated or truncated
+        if done:
+            print("done")
+            time.sleep(2)
         obs = next_obs
-        time.sleep(2)
+        
